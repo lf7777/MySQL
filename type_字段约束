@@ -1,0 +1,138 @@
+一. 数 据 类 型 :
+
+
+    <1> 字 符 串 : 
+
+        (1) char() 定长字符串 : 
+            无论 存多 存少,该字符串 就占 指定长度的字节.但 <不能超过指定长度>.
+
+            1.指定的跨度 : 最小 0 ,最大 255
+                0 ~ 255
+        
+        (2) varchar() 不定长字符串 :
+            实际数据占用多少长度,根据具体字符定,但 <不能超过指定长度>
+
+            1. 指定的跨度 : 最小 0 ,最大 65535
+
+        
+        (3) text 不定长,适合存储, 大文本内容 :
+            例如 : 商品的介绍,文章内容等.
+
+            1. 不需要指定跨度, 最小 0 ,最大 65535
+        
+        
+        (4)
+
+
+
+    <2> 数 字 :
+
+        (1) int 包括 有无符号 (4字节)
+
+            指定 无符号 : int unsigned
+            
+            范 围 : 无符号 unsigned 0 ~ 42亿
+
+                    有符号 -21亿 ~ 21亿
+
+
+        (2) tinyint 包括 有无符号 (1字节)
+
+            指定 无符号 : tinyint unsigned
+
+            范 围 : 无符号 0 ~ 255
+
+                    有符号 -128 ~ 127
+        
+        (3) smallint (2字节)
+
+            指定 无符号 smallint unsigned
+
+            范 围 : 无符号 0 ~ 65535
+                    
+                    有符号 -32768 ~ 32767
+
+        (4) mediumint (3字节)
+
+            指定 无符号 mediumint unsigned
+
+            范 围 : 无符号 0 ~ 16777215
+
+                    有符号 -8388608 ~ 8388607
+    
+
+        (5) bigint 包括 有无符号 (数值很大很大)
+
+            指定 无符号 : bigint unsigned
+
+        (6) float 单精度浮点值
+
+            double 双精度浮点值
+
+          decimal(5,2) 表示 数值 总共5位 , 小数占2位 .
+
+              mysql没有专门存储货币的数据类型,一般用此方法进行表示.
+
+    
+    
+    <3> 日 期 时 间 :
+
+        (1) data 日期 年月日 
+
+        (2) time 时间 时分秒
+
+        (3) datatime 日期 时间
+
+        datatime 8字节 1000-01-01 00:00:00 ~ 9999-12-31 23:59:59
+    
+    
+    
+    <4> 二 进 制 :
+            多媒体资源是用二进制储存,但是没有人用 二进制去储存图片音频视频.
+
+          如何存储 多媒体资源 :
+
+            1. 把文件下载到本地
+
+            2. 把文件的路径和文件名 记录下来
+            
+            3. 存储到数据库中,存成字符串
+    
+    
+    <5>
+    
+
+
+二. 表 的 字 段 约 束 :
+
+
+    <1> unsigned 无符号
+
+            示 例 : create table users(id int unsigned);
+
+    
+    <2> not null 不能为空, 如果在操作数据库 时输入该字段的数据为 NULL,则报错.
+
+            示 例 : create table users(name varchar(20) not null);
+    
+    
+    <3> default 设置默认值. (如果不写,给出的默认值是多少)
+
+            示 例 : create table users(name varchar(20) default '未命名');
+    
+    
+    <4> primary(主要的) key 主键不能为空 且唯一.
+    <5> auto_increment 定义列为自增属性,一般用于主键,数值会自动加1.
+
+        示 例 : create table users(id int unsigned auto_increment primary key)
+    
+    
+    <6> unique 唯一索引(数据不能重复:用户名)可以增加查询速度
+               但是会降低插入和更新速度.
+
+        示 例 : create table users(username varchar(20) not null unique)
+
+                unique 表中此字段的内容不会和别的重复.
+            
+    
+    <7>
