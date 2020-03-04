@@ -1,0 +1,184 @@
+目 标 : 简化SQL语句,提升查询精度速度.
+
+
+一. 操 作 符 :
+
+    <1> != 不等于
+    
+    
+    <2> is null 获取为空 的那一个值.(检索一个为空的值.)
+    
+    
+    <3> between 在 值 and 值 之间
+    
+    
+    <4> and 并且 (语句复杂时,注意 优先级问题,加括号)
+    
+    
+    <5> or 或
+    
+    
+    <6> not in 排除 
+    
+    
+    <7>
+
+    
+
+二. 子 句 :
+
+    <1> between 
+
+        select * from bb where age between 22 and 25;
+
+    <2> not 
+
+        select * from bb where not age > 30;
+
+        not in 
+
+        select * from bb where id not in (6,7);
+        
+    <3> 区分一个子句 和其他 子句 :
+
+            需要的时候 , 用 () 将语句包起来.
+
+        select * from bb where (age =30 and sex='男') or id in (10,13);
+
+
+
+    <5> like <通配符> 按照指定的字段 搜索 符合条件的数据 :
+
+        语 法 : where 字段 like 条件('L%' '%L' '__' 'L__')
+
+        注 意 : 尽量不要把通配符放到搜索字符的前面
+
+                通配符 会使 索引 失效 !!!
+
+        
+        (1) '数据%' :  % 表示所有.
+        
+            该数据开头的所有.(只能是开头)
+
+            select * from bb where username like 'c%';
+
+            拓 展 : 已试验
+
+                '%cc' 查 以cc结尾的 所有.
+
+        (2) '数据_' :  _ 表示 一位 .
+        
+            数据开头的 是两位的所有.
+
+            select * from bb where username like 'c_'
+
+            拓 展 : 已试验 
+
+                '__c' 查两位未知,一位确定是 c 的.
+
+                '___' 查数据是 三位的.
+
+        (3) '__c%' 混 合 使 用 : 
+
+            select * from bb where username like '__c%'
+
+            查第三位是 c 的 后面所有位都包括的 数据.
+
+        (4) 不管数据类型 条件必须字符串格式:
+
+            select * from bb where id like '1%';
+
+        (5) '%name%'  包含
+
+
+    <6> regexp MySQL 的正则 :
+
+        where name regexp '[0-5]abc'
+
+
+    <7> as 别 名 : 
+
+        select id_name as id from bb; 
+
+    <8> 完 全 限 制 表 名 :
+
+        select b.id,b.username from bb as b;
+
+
+    <9> 字 段 拼 接 : (把多个字段的内容放到一个字段显示)
+
+        concat 函数里 可以随意指定字符串,最终一起拼接.
+
+        1. 普通 直接相连的拼接 :
+        select concat(id,username) from bb;
+
+        2. 指定别名的拼接 :
+        select concat(id,username) as id_and_username from bb;
+        
+        3. 拼接其他内容 :
+        select concat(id,':',username) as id_and_username from bb;
+
+
+    分 组 : group by
+
+    <1> group by 分 组 :
+
+        select sex,count(id) from bb group by sex;
+
+    <2> group by 各个年龄段 人数 :
+
+        select age,count(id) from bb group by age;
+
+    <3> 加 别 名 版 :
+
+        selecdt age as 年龄分布,count(id) as 人数 from bb group by age;
+
+
+    <4> 多 重 混 合 版 :
+
+        select ltrim(age) as 年龄分布,ltrim(count(id)) as 次数
+
+        from bb group by age order by age desc limit 3;
+
+
+    <5> 暂无用count(id) = 3 :
+
+        将 count 的默认值,改为3, 所以 当次数 达到 3 时,才会显示 1次.
+
+
+
+    Having : 在原有 分组 得到次数后,再进行 细化:having count(*)/别名=某次数;
+
+           having = 某次数 也可以是 >= 或者其他 : having count(*)/别名>=某次数
+
+
+    注 意 : 只能用在 group by 后面,对已经分组的结果,再进行过滤.
+
+        select age,count(id) as num from bb group by age having num =1;
+
+
+
+三. Select 子 句 及 写 顺 序 :
+
+
+    子句        说明                    是否必须
+
+    Select      要返回的列或表达式      是
+
+    From        从中检索数据的表        仅在从表选择数据时使用
+
+    Where       行级过滤                否
+
+    Group by    分组说明                否
+
+    Having      组级过滤                否
+
+    Order by    输出排序顺序            否
+
+    Limit       要检索的行数            否
+
+
+
+四. Select 指 令 的 执 行 顺 序 :
+
+    From    Select    Where    

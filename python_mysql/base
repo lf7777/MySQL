@@ -1,0 +1,5 @@
+一. 导 入 模 块 :
+
+    import pymysql
+
+    help(pymysql)
