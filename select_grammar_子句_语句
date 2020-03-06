@@ -1,7 +1,11 @@
 目 标 : 简化SQL语句,提升查询精度速度.
 
 
-一. 操 作 符 :
+一. where 子 句 操 作 符 :
+
+
+  where : 行 级 过 滤 
+
 
     <1> != 不等于
     
@@ -18,11 +22,10 @@
     <5> or 或
     
     
-    <6> not in 排除 
-    
-    
-    <7>
+    <6> in 
 
+    <7> < <= > >=
+    
     
 
 二. 子 句 :
@@ -31,13 +34,21 @@
 
         select * from bb where age between 22 and 25;
 
-    <2> not 
+    <2> in 与 not 
 
+      in :
+            in 操作符一般比 or 操作符 执行更快,由于mysql的原理.
+
+            in 的最大优点 是可以包含其他 select 语句,
+
+      not : 
         select * from bb where not age > 30;
 
         not in 
-
         select * from bb where id not in (6,7);
+
+        用 作 : 在更复杂的子句中, not 是非常有用的.
+                例如在与 in操作符联合使用时,not使找出与条件列表不匹配的行很简单.
         
     <3> 区分一个子句 和其他 子句 :
 
@@ -100,9 +111,15 @@
 
         select id_name as id from bb; 
 
-    <8> 完 全 限 制 表 名 :
 
-        select b.id,b.username from bb as b;
+    <8> 完 全 限 制 表 名 及 列 名 :
+
+        select 字段 from 表
+
+        select 表.字段 from 表
+
+        select 表.字段 from 库.表
+
 
 
     <9> 字 段 拼 接 : (把多个字段的内容放到一个字段显示)
@@ -119,29 +136,46 @@
         select concat(id,':',username) as id_and_username from bb;
 
 
-    分 组 : group by
+    <10> distinct 去 重 :
 
-    <1> group by 分 组 :
+         select distinct a,b from bb; = select a,b from bb group by a,b;
 
+
+    <11> limit 限制结果数量(和跳行) 写在最后
+
+         select a from bb limit 4,4;
+
+
+    <12> order by  升序. order by ... desc 降序.
+
+
+    分 组 : group by 将一个字段中,拥有相同名称的. 
+                查哪个字段 就要对哪个字段进行 group by
+
+    <1> group by 字段名 :
         select sex,count(id) from bb group by sex;
 
     <2> group by 各个年龄段 人数 :
-
+            count(id) 是一个搭配
         select age,count(id) from bb group by age;
 
     <3> 加 别 名 版 :
-
         selecdt age as 年龄分布,count(id) as 人数 from bb group by age;
 
 
-    <4> 多 重 混 合 版 :
+    <4> 多 重 混 合 :
 
         select ltrim(age) as 年龄分布,ltrim(count(id)) as 次数
 
         from bb group by age order by age desc limit 3;
 
+    <5> 多 重 分 组 :
+        在当前的检索的列中,除了聚集函数不用列到分组上,其他列都需要在分组后面列出
 
-    <5> 暂无用count(id) = 3 :
+        select class,cname,count(*) from bb group by class,cname;;
+
+
+    <6> 暂无用count(id) = 3 :
 
         将 count 的默认值,改为3, 所以 当次数 达到 3 时,才会显示 1次.
 
@@ -158,7 +192,45 @@
 
 
 
-三. Select 子 句 及 写 顺 序 :
+三. J O I N :
+
+  <详见 my_mysql库总的 t1表 和 t2表>
+
+    <1> cross join    cross : 交叉    笛卡尔积
+
+        语 法 : select t1.id,t2.id from t1 cross join t2;
+        
+        用t1中所有id数据分别对t2中所有id数据一一匹配.
+
+
+    <2> inner join 从cross join 的基础上 得到符合条件的查询结果.
+
+        内连接就是求两个表的交集,从交叉配对上选出满足 on子句 条件的数据.
+
+        语 法 : select t1.id,t2.id from t1 inner join t2 on t1.person.t2.person
+
+
+
+    <3> left join 
+
+        左连接的含义就是求两个表的交集外加左表的剩下数据.就是从交叉配对中
+
+        挑出 on子句 条件成立的记录,然后加上左表的剩余记录.
+
+        语 法 : select t1.id,t2.id from t1 left join t2 on t1.person=t2.person;
+
+
+    <4> left join
+
+        右连接的含义就是求两个表的交集外加右表的剩下数据.就是从交叉配对中
+
+        挑出 on子句 条件成立的记录,然后加上右表的剩余记录.
+
+        语 法 : select t1.id,t2.id from t1 right join t2 on t1.person=t2.person;
+
+
+
+四. Select 子 句 及 写 顺 序 :
 
 
     子句        说明                    是否必须

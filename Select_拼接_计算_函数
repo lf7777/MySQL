@@ -28,6 +28,20 @@
 
 三. 数 据 函 数 :  
 
+    
+    left()
+    
+    参 数 1 : 要查的字段
+
+    参 数 2 : 查字段中内容的 <前> 几个
+
+
+    right()
+    
+    参 数 1 : 要查的字段
+
+    参 数 2 : 查字段中内容的 <后> 几个
+
 
     <1> upper()
         转换为大写
@@ -84,8 +98,12 @@
         (1) 按照字段统计 :
             select count(id);
        
-        (2) 加条件的统计(where) 
+        (2) where : 字段为 指定值的 行数量是多少 
             select count(sex) from bb where sex='男';
+
+        注 意 : 用 count(*) 不会忽略某列中有 null 的行数.
+
+                而 count(某列) 某列中 有 null count计数时则会忽略.
 
 
     <2> sum() 求 和 : 
@@ -106,7 +124,7 @@
 
   分 组 :
 
-    <1> group by 分 组 :
+    <1> group by 分 组 : (意思是按照 group by 后面的进行分组)
 
         select sex,count(id) from bb group by sex;
 
@@ -126,7 +144,7 @@
         from bb group by age order by age desc limit 3;
 
 
-  Having : 在原有 分组 得到次数后,再进行 细化:having count(*)/别名=某次数;
+  Having : 对分组后的结果 再进行过滤 : having count(*)/别名=某次数;
 
            having = 某次数 也可以是 >= 或者其他 : having count(*)/别名>=某次数
 
@@ -197,3 +215,4 @@
 
     <9> tan()
         返回一个角度的正切
+

@@ -1,0 +1,139 @@
+一. 关 系 表 :
+
+  概 念 : 两个表或多个表之间数据单独存储,但是每个不同的数据之间还有一些关系.
+
+
+    <1> 一 对 一 关 系 :
+
+            A表 对应 B表. B表内 有 A表的主键. 
+
+            不同的相关数据,存储在不同的表中,A表中的数据只对应一条B表中的数据.
+
+
+    <2> 一 对 多 关 系 :
+
+            一个对应多个表,多个表中存有 主表的 主键.
+            (一个班 对应这个班的多个学生)
+
+        多 对 一 :
+            
+            多个小的 对应一个总体的.(这个班的多个学生对应 这个班)
+
+
+    <3> 多 对 多 关 系 :
+
+            两大类之间,多个标签 和 多本书,一个标签对应多本书.
+
+            两大阵营之间的 多个 对应 多个 的关系叫做多对多.
+
+                一般将此关系写到 单的一个表中,自增id,书id,标签id.
+
+
+    外 键 :
+
+        A表中的主键 是B表中的一列数据,B表中的某列数据 是A表中的 主键.
+
+        通过 A表的外键,就能与B表产生关联的关系.
+
+    外 键 分 两 种 :
+
+        物理外键(系统手段) : 指在建库建表时,直接指定表之间的关系.指定外键.
+
+            一旦项目上了规模(并发)很容易造成死锁.
+
+        逻辑外键(人工): 建表时不使用特殊的sql指令去指定外键.而是通过业务逻辑实现
+
+
+
+二. 子 查 询 :(也叫嵌套查询) 效率是三种 表间查询 最低的.
+
+
+    概 念 : 子 查 询 : 在当前查询语句中,嵌套了其他查询.
+     
+            一条 sql语句的结果 是另一条语句的条件.
+
+    A表 存了用户名, B表存了 用户名 和 性别.
+
+    通过 A表的 用户名,找到对应在 B表中的性别.
+
+    逻 辑 : 我最终要查什么,条件是什么,在哪里查. 
+
+
+    <1> 条件中的 子查询 :
+    
+        select sex from B表 where username = (select username from A表 where 
+    
+        username = 某名 )
+
+
+    <2>  把子查询结果 写在 新表字段中 :
+        
+        select id,name,(select ...) from ...
+
+        把子查询 直接 作为 新表的一个字段.
+
+
+
+
+二. 表 连 接 :
+    
+    原 理 : 导 入 两 张 表 ,得到结果为 笛卡尔积,通过 外键 找到关联的部分
+
+    select A.name,B.name,B.price 
+
+    from A,B
+
+    找到 两表 可以关联的部分 :
+    where A.id = B.id
+
+
+三. J O I N : (内连接)
+
+  <详见 my_mysql库总的 t1表 和 t2表>
+
+  join 后还可跟 where 条件
+
+    <1> cross join    cross : 交叉    笛卡尔积
+
+        语 法 : select t1.id,t2.id from t1 cross join t2;
+
+        用t1中所有id数据分别对t2中所有id数据一一匹配.
+
+
+    <2> inner join (可简写为 join )
+    
+        从cross join 的基础上 得到符合条件的查询结果.
+
+        内连接就是求两个表的交集,从交叉配对上选出满足 on子句 条件的数据.
+
+        语 法 : select t1.id,t2.id from t1 inner join t2 on t1.person.t2.person
+
+
+    <3> left join
+
+        左连接的含义就是求两个表的交集外加左表的剩下数据.就是从交叉配对中
+
+        挑出 on子句 条件成立的记录,然后加上左表的剩余记录.(通常为空的数据)
+
+        语 法 : select t1.id,t2.id from t1 left join t2 on t1.person=t2.person;
+
+
+    <4> right join
+
+        右连接的含义就是求两个表的交集外加右表的剩下数据.就是从交叉配对中
+
+        挑出 on子句 条件成立的记录,然后加上右表的剩余记录.
+
+        语 法 : select t1.id,t2.id from t1 right join t2 on t1.person=t2.person;
+
+
+    多 表 连 接 :
+
+        语 法 : from...join...on ... join...on...join...on...
+
+        select order_num,prod_name,vend_name,prod_price,quantity
+        from vendors as vs
+        left join products as ps on vs.vend_id = ps.vend_id
+        join orderitems as os on ps.prod_id=os.prod_id
+        where order_num =20005;
+

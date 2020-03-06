@@ -1,3 +1,4 @@
+
 一. SQL Structured Query Language : 结构化 查询 语言
 
 
@@ -30,7 +31,7 @@
 
         3. DDL 数据 定义 
 
-           创建数据库中的 库,表,视图,索引,同义词,聚簇等
+           创建数据库中的 库,表,视图,索引,同义词,存储过程,聚簇等
            如 :
            create table/view/index/sysn 等
 
@@ -207,6 +208,12 @@
 
     3. \q 退出 MySQL
 
+  MySQL 变 量 :
+
+    @ 表示一个变量
+
+    @@ 表示系统定义的全局变量.
+
 
 三. 基 本 操 作 :
 
@@ -366,6 +373,11 @@
 
         2. 修改值时,必须加where 找到某个某些歌,不加则所有都改了.
 
+        3. 如果不给表设置字符集,默认同库的字符集相同.
+
+        4. 在建了表之后为表添加 字符集:
+                
+                alter table table_name convert to character set utf8mb4;
 
 
     <1> 给 表 添  加 数 据 : 只添加一条
@@ -561,3 +573,12 @@
         select md5('aa123456')
 
             return 32位 固长
+
+
+    <2> 隐 式 提 交 :
+
+        执行 DDL 的语句时,相当于执行了 commit
+
+        示 例 : 在事务中添加字段,alter table table_name add 字段 int:
+
+        结果为 : 在其他会话中 会看到提交的 新字段.
