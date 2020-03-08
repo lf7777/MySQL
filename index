@@ -1,0 +1,128 @@
+一. 索 引 的 概 念 :
+
+
+    <1> 优 缺 点 :
+
+        (1) 优 点 : 
+
+            加快检索速度,减少I/次数,;根据索引分组和排序时,可以加快分组和排序.
+
+        (2) 缺 点 :
+
+            1. 索引本身也是表,因此会占用存储空间,索引表占用的空间是索引表的1.5倍
+
+            2. 索引表的维护和创建需要时间成本,随数据量增大而增大.
+
+            3. 在修改数据表时,还需要同时修改索引表.
+
+    <2> 索 引 的 分 类 及 添 加 方 式 :
+        
+        (1) 主 键 索 引 : 根据 主键 建立索引,不允许为空和空值.
+
+            alter table table_name add primary key pk_index(field_name)
+
+        (2) 唯 一 索 引 : 列的值必须是唯一的(unique),允许空值.
+
+            alter table table_name add unique index_name(field_name)
+
+        (3) 普 通 索 引 : 普通列构建索引,没有任何限制.
+
+            alter table table_name add index index_name(field_name)
+
+        (4) 全 文 索 引 : 用大文本对象的列构建的索引(mysql5.7不支持中文())
+
+            alter table table_name add fulltext index ft_index(field_name)
+
+        (5) 组 合 索 引 : 用多个列组合构建的索引,这多个列中的值不允许为空值.
+
+            alter table table_name add index index_name(field1_name,field2...)
+
+                列1是 索引
+                列1列2是 索引
+                列1列2列3 是索引    使用所以时必须从第一个开始.
+
+
+二. 索 引 的 基 本 操 作 :
+
+
+    <1> 普 通 索 引 的 创 建 :
+
+        表名 及 字段名
+
+        (1) 创 建 表 时 添 加 :
+
+            create table mytable(
+                id int not null primary key auto_increment,
+                username varchar(10) not null,
+                index[indexname] (username(length))
+            )
+
+        (2) create index index_name on my_table(field_name);
+
+            或 者 :
+
+            alter table my_table add [unique] index index_name(field_name)
+
+
+    <2> 删 除 索 引 :
+
+        (1) drop index my_index on tablename;
+
+        (2) alter table table_name drop index index_name;
+
+
+    <3> 查 看 索 引 : 
+
+            show index from table_name;
+
+
+    <4> 注 意 :
+
+        <1> 索引需要占用磁盘空间,因此在创建索引时要考虑到磁盘空间是否足够.
+
+        <2> 创建索引时需要对表加锁,因此实际操作中需要在业务空闲期间进行.
+
+        <3> 只有让数据查找更快时,使用索引.
+
+
+三. 主 键 索 引 操 作 :
+
+
+    <1> 添 加 主 键 索 引 : (用 修改字段格式 的方式)
+
+        alter table table_name modify 主键名 int primary key auto_increment;
+
+    <2> 删 除 主 键 索 引 :
+
+        先修改自增,才能删除主键索引.
+
+        删除自增 : alter table table_name modify 主键名 格式;
+
+        删除索引 : alter table users drop primary key;(删除主键索引)
+
+            或 用 change/modify 重新设置格式.
+
+
+        
+四. 唯 一 索 引 操 作 :
+
+
+    <1> 添加 唯一 索引
+
+        (1) 添加 唯一索引
+            
+            alter table table_name add unique index_name(field_name);
+
+        (2) 或 修改 字段格式
+
+            alter table table_name modify field_name unique;
+
+    <2> 删除 唯一索引
+    
+        (1) 删除 唯一索引 
+            
+            alter table table_name drop index index_name;
+            
+            (删除不能用修改 字段格式的方式(modify/change))
+
+

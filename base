@@ -1,4 +1,3 @@
-
 一. SQL Structured Query Language : 结构化 查询 语言
 
 
@@ -214,6 +213,11 @@
 
     @@ 表示系统定义的全局变量.
 
+  
+  流 程 控 制 :
+
+    1. case when ... else ... end
+
 
 三. 基 本 操 作 :
 
@@ -254,6 +258,8 @@
 
 四. 库 操 作 :
 
+    
+    创 建 库 时 记 得 指 定 字 符 集 ! ! ! ! !
 
     <1> 查 看 所 有 库 :
         show databases;
@@ -511,7 +517,9 @@
                 elect id,username,'长的好看的' as id1 from bb;
 
 
-    去 重 (获取表中的 年龄分布) :
+    去 重 :
+
+        次关键字,指示MySQL只返回不同的值.
 
         语 法 : select 后面 加 distinct
         

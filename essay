@@ -3,3 +3,11 @@
     <1> select id,name,(select ...) from ...
 
         把子查询 直接 作为 新表的一个字段.
+
+
+三. 问 题 及 解 决 方 案 :
+
+
+    <1> 删除行数据时 自增值跨过 被删除的自增值.
+
+        在每次删除数据后,执行 alter table table_name auto_increment=1;

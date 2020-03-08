@@ -1,7 +1,33 @@
 目 标 : 简化SQL语句,提升查询精度速度.
 
 
-一. where 子 句 操 作 符 :
+一. Union :
+
+    组 合 查 询 : 多条一起查,返回一个大的结果.
+
+    规 则 :
+
+            <1> 必须 2条以上 select语句 组成. 
+
+            <2> 语句间 用union关键字分隔
+
+                  示 例 : select * from t1 union select * from t2;
+
+            <3> 查询的每列 必须包含相同的 查询语句类型.(字段,聚集函数等)
+
+            <4> 列的数据类型 必须兼容.
+
+            <5> union all 
+            
+                union查询结果 <默认去重>. union all 获取所有结果 不去重.
+
+            <6> order by 
+            
+                只能用在最后一条语句中.
+
+
+
+二. where 子 句 操 作 符 :
 
 
   where : 行 级 过 滤 
@@ -24,17 +50,19 @@
     
     <6> in 
 
+
     <7> < <= > >=
     
     
 
-二. 子 句 :
+三. 子 句 :
 
     <1> between 
 
         select * from bb where age between 22 and 25;
 
-    <2> in 与 not 
+
+    <2> in , not , not in 
 
       in :
             in 操作符一般比 or 操作符 执行更快,由于mysql的原理.
@@ -50,15 +78,20 @@
         用 作 : 在更复杂的子句中, not 是非常有用的.
                 例如在与 in操作符联合使用时,not使找出与条件列表不匹配的行很简单.
         
-    <3> 区分一个子句 和其他 子句 :
 
-            需要的时候 , 用 () 将语句包起来.
+    <3> ()
+        
+        区分一个子句 和其他 子句 :
+
+        需要的时候 , 用 () 将语句包起来.
 
         select * from bb where (age =30 and sex='男') or id in (10,13);
 
 
 
-    <5> like <通配符> 按照指定的字段 搜索 符合条件的数据 :
+    <4> like 
+    
+        <通配符> 按照指定的字段 搜索 符合条件的数据 :
 
         语 法 : where 字段 like 条件('L%' '%L' '__' 'L__')
 
@@ -102,17 +135,23 @@
         (5) '%name%'  包含
 
 
-    <6> regexp MySQL 的正则 :
+    <6> regexp 
+    
+        MySQL 的正则 
 
         where name regexp '[0-5]abc'
 
 
-    <7> as 别 名 : 
+    <7> as 
+        
+        别 名 : 
 
         select id_name as id from bb; 
 
 
-    <8> 完 全 限 制 表 名 及 列 名 :
+    <8> table_name.filed_name
+    
+        完 全 限 制 表 名 或 列 名 :
 
         select 字段 from 表
 
@@ -121,8 +160,9 @@
         select 表.字段 from 库.表
 
 
-
-    <9> 字 段 拼 接 : (把多个字段的内容放到一个字段显示)
+    <9> concat
+    
+        字 段 拼 接 : (把多个字段的内容放到一个字段显示)
 
         concat 函数里 可以随意指定字符串,最终一起拼接.
 
@@ -136,54 +176,59 @@
         select concat(id,':',username) as id_and_username from bb;
 
 
-    <10> distinct 去 重 :
+    <10> distinct 
+         去 重 :
 
-         select distinct a,b from bb; = select a,b from bb group by a,b;
+         次关键字,指示MySQL只返回不同的值.
 
+         语 法 : select 后面 加 distinct
 
-    <11> limit 限制结果数量(和跳行) 写在最后
+         示 例 : select distinct age from bb;
+    
+
+    <11> limit 
+    
+         限制结果数量(和跳行) 写在最后
 
          select a from bb limit 4,4;
 
 
-    <12> order by  升序. order by ... desc 降序.
+    <12> order by  升序. 
+    
+         order by ... desc 降序.
 
 
-    分 组 : group by 将一个字段中,拥有相同名称的. 
-                查哪个字段 就要对哪个字段进行 group by
+  分 组 : group by 
 
-    <1> group by 字段名 :
+        用到聚合函数 就要用到分组,分组再聚合.不然是全部的(sum(),count()等)
+  
+        将一个字段中,拥有相同名称的. 
+        
+        查哪个字段 就要对哪个字段进行 group by
+
+    <1> group by 
+    
+        字段名 :
+        
         select sex,count(id) from bb group by sex;
 
-    <2> group by 各个年龄段 人数 :
-            count(id) 是一个搭配
-        select age,count(id) from bb group by age;
 
-    <3> 加 别 名 版 :
-        selecdt age as 年龄分布,count(id) as 人数 from bb group by age;
+    <2> 多 重 分 组 :
 
-
-    <4> 多 重 混 合 :
-
-        select ltrim(age) as 年龄分布,ltrim(count(id)) as 次数
-
-        from bb group by age order by age desc limit 3;
-
-    <5> 多 重 分 组 :
         在当前的检索的列中,除了聚集函数不用列到分组上,其他列都需要在分组后面列出
 
-        select class,cname,count(*) from bb group by class,cname;;
+        select class,cname,count(*) from bb group by class,cname;
 
 
-    <6> 暂无用count(id) = 3 :
+    <3> 暂无用count(id) = 3 :
 
         将 count 的默认值,改为3, 所以 当次数 达到 3 时,才会显示 1次.
 
 
 
-    Having : 在原有 分组 得到次数后,再进行 细化:having count(*)/别名=某次数;
+  Having : 在原有 分组 得到次数后,再进行 细化:having count(*)/别名=某次数;
 
-           having = 某次数 也可以是 >= 或者其他 : having count(*)/别名>=某次数
+         having = 某次数 也可以是 >= 或者其他 : having count(*)/别名>=某次数
 
 
     注 意 : 只能用在 group by 后面,对已经分组的结果,再进行过滤.
@@ -192,7 +237,7 @@
 
 
 
-三. J O I N :
+四. J O I N :
 
   <详见 my_mysql库总的 t1表 和 t2表>
 
@@ -230,7 +275,7 @@
 
 
 
-四. Select 子 句 及 写 顺 序 :
+五. Select 子 句 及 写 顺 序 :
 
 
     子句        说明                    是否必须
@@ -251,6 +296,6 @@
 
 
 
-四. Select 指 令 的 执 行 顺 序 :
+六. Select 指 令 的 执 行 顺 序 :
 
     From    Select    Where    
