@@ -5,9 +5,35 @@
         把子查询 直接 作为 新表的一个字段.
 
 
-三. 问 题 及 解 决 方 案 :
+    <2> desc select ..... from .... where ... \G;
+
+        作 用 : 分析语句的快慢,及详情.
+
+        语 法 : 查询语句前 加desc 不会执行语句,而是分析语句.
+
+
+    <3> explain
+
+
+
+二. 问 题 及 解 决 方 案 :
 
 
     <1> 删除行数据时 自增值跨过 被删除的自增值.
 
         在每次删除数据后,执行 alter table table_name auto_increment=1;
+
+
+    <2> 查询所有字符集相关的设置
+
+        show varibales like '%char%';
+
+    <3> 导入 建表语句 及 insert 的数据.
+
+        source 路径;
+
+
+    <4> 删除行数据时 自增值跨过 被删除的自增值.
+
+        在每次删除数据后,执行 alter table table_name auto_increment=1;
+

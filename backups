@@ -1,0 +1,79 @@
+一. 数 据 库 的 恢 复 :
+
+
+    bin-log 日志 会记录开启之后所有的数据库操作.
+
+    <1> 恢 复 前 提 : 开启 bin-log 日志,并定期备份.
+
+            注 意 : 将日志中最后一条 删库 指令 删除.
+
+    <2> 恢复时 线上项目需要暂停.
+
+    <3> 思 路 :
+
+            1. 通过定期备份的文件恢复大量数据.
+
+            2. 通过日志恢复备份后的数据操作.
+
+
+
+二. bin-log 日 志 操 作 :
+
+
+  Ubuntu :
+
+    <1> 开启bin-log日志
+
+            sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
+
+    <2> 找到 以下两个配置项,打开注释
+
+            server-id = 1
+
+            log_bin = /var/log/mysql/mysql-bin.000001
+
+    <3> 重启 mysql
+
+            sudo service mysql restart
+
+    <4> 查看当前所有 bin-log 日志
+
+            show binary logs;
+
+    <5> 查看是否存在 bin-log 文件
+
+            cd /var/log/mysql/ 
+
+    <6> 重置 bin-log 日志
+
+            reset master;
+
+
+  Windows :
+
+    <1> 在 MySQL 目录下 bin目录 找到 my.ini文件
+
+    <2> 在 mysqld 配置项下 写入
+
+        server_id = 123456
+        log_bin = mysql-bin
+        binlog_format = ROW
+
+
+三. 备 份 :
+
+    <1> mysqldump -uroot -p -B -F -R -x --master-data=2 库名 >绝对路径;
+
+    退出 mysql 在终端下执行命令.
+
+    参 数 说 明 :
+
+        -B 指定数据库
+        -F 刷新日志
+        -R 备份存储过程
+        -x 锁表
+
+
+四. 通 过 bin-log 恢 复 数 据 :
+
+    <1> 先将 bin-log 文件到处

@@ -1,0 +1,58 @@
+一. 慢 查 询 :
+
+    慢查询日志 由long_query_time执行时间超过几秒的SQL语句组成.
+
+    <1> 查询慢查询日志的开启状态
+
+        show variables like '%slow%';
+
+    <2> 开启慢查询
+
+        set global slow_query_log = 'ON';
+
+    <3> 设置慢查询时间
+
+        set long_query_time = 2;
+
+
+二. explain
+
+column          JSON名称      含义
+
+id              select_id     该select表示符(或union)
+
+select_type     没有          该select类型()
+
+table           table_name    输出行的表
+
+partitions      partitions    匹配的分区,通常不用
+
+type            access_type   连接类型(all,const,system...)
+
+possible_keys   possible_keys 可供选择的索引
+
+key             key           实际选择的索引
+
+key_len         key_lenght    所选键的长度
+
+ref             ref           列与索引进行比较
+
+rows            rows          估计要检查的行
+
+filtered        filtered      按表条件过滤的行的百分比
+
+extra           没有          附加信息
+
+
+           id: 1
+  select_type: SIMPLE    查询的类型 simple 表示一个简单的查询
+        table: dajie
+   partitions: NULL
+         type: ALL       连接的类型 all表示全表扫描,最差
+possible_keys: NULL      可能用到的索引
+          key: NULL      在执行中具体使用的索引
+      key_len: NULL
+          ref: NULL
+         rows: 177698    有可能扫描 多少行 得到结果
+     filtered: 100.00
+        Extra: NULL

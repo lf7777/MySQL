@@ -1,0 +1,42 @@
+一. 视 图 作 用 :
+
+    将一个查询语句,保存为视图(和原数据相关联的 一张虚拟表,但不存数据).
+    
+    查询此视图时,返回上一个查询语句 查询到的信息.
+
+
+二. 基 本 操 作 :
+
+    <1> 创 建 视 图 :
+
+        create view 视图名 as 查询语句
+
+        create view view_name as select ......
+
+
+    <2> 查看当前库中 所有的视图
+
+        show tables;  查看所有表和视图
+
+        show table status where comment='view';  查看当前库中所有视图.
+
+
+    <3> 删除 :
+        drop view view_name;
+
+        修改 :
+        alter view
+
+        创建 create view
+
+
+
+
+三. 注 意 ! ! ! : 
+
+    <1> view 视图里保存的数据 和 原数据 是相关联的.
+
+            修改原数据 等与修改 视图.
+            修改视图   等于修改 原数据.
+
+    <2> MySQL 5.0后版本支持.

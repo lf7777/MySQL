@@ -1,0 +1,30 @@
+一. 存 储 过 程 : (函数)
+
+    游标 仅限于 存储过程当中,mysql5.0以上版本支持.
+
+    \d     修改 以什么结束语句
+
+    示 例 : \d //    \d ; 改回
+
+    <1> 示 例 : 
+
+(1) 定 义 存 储 过 程 :
+
+\d //
+create procedure p1()
+begin
+set @i=0;
+while @i<10 do
+insert into users values(null,concat('users:',@i),concat('users',@i,'@qq.com'),concat('123',@i));
+set @i=@i+1;
+end while;
+end;
+//
+
+(2) 执 行 存 储 :
+
+call func_name
+
+(3) 查 看 存 储 信 息 :
+
+show create procedure fun_name \G

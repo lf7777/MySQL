@@ -157,10 +157,16 @@
        
            表结构为 .frm 存储表结构, .ibd 存储数据和索引.
 
+           聚簇索引
+
 
      2.  MyISAM 主要的非事物处理存储引擎
 
            表结构为 .frm 存储表结构, .MYD 存数据, .MYI 存索引
+
+           因myisam的索引文件设数据文件分开,所以B+Tree的叶子存的是地址而非数据.
+
+           非聚簇索引
 
 
      3.  ARCHIVE 用于数据存档(行被插入后不能再修改)
@@ -273,6 +279,18 @@
     <4> 删 除 一 个 库 :
         drop database library_name;
 
+    <5> 查看建库语句 :
+
+        show create database;
+
+    <6> 创建库时 必须设置字符集
+
+        create database name default character set = 'utf8mb4';
+
+    <7> 建库后 为库添加字符集 
+
+        alter database character set = utf8mb4;
+
 
 
 五. 表 操 作 :
@@ -320,7 +338,16 @@
             查的 table表中 username为张三的一行中的 id数据.
 
 
-    <7> 修 改 表 结 构 :
+    <7> 表 复 制 :
+
+        create table 目标表名 like 原表名;
+
+
+    <8> 修 改 表 结 构 :
+
+    <9> 为表添加 字符集:
+
+        alter table table_name character set = utf8mb4;
 
 
       添 加 字 段 :
@@ -507,6 +534,9 @@
         (6) 按照指定的字段 搜索 符合条件的数据 : (like)
 
             
+    <5> 复制 表数据:
+
+        insert into 目标表名 select ... from 原表;
 
 
     创 建 虚 拟 数 据 :

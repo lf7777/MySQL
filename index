@@ -45,38 +45,12 @@
 二. 索 引 的 基 本 操 作 :
 
 
-    <1> 普 通 索 引 的 创 建 :
-
-        表名 及 字段名
-
-        (1) 创 建 表 时 添 加 :
-
-            create table mytable(
-                id int not null primary key auto_increment,
-                username varchar(10) not null,
-                index[indexname] (username(length))
-            )
-
-        (2) create index index_name on my_table(field_name);
-
-            或 者 :
-
-            alter table my_table add [unique] index index_name(field_name)
-
-
-    <2> 删 除 索 引 :
-
-        (1) drop index my_index on tablename;
-
-        (2) alter table table_name drop index index_name;
-
-
-    <3> 查 看 索 引 : 
+    <1> 查 看 索 引 : 
 
             show index from table_name;
 
 
-    <4> 注 意 :
+    <2> 注 意 :
 
         <1> 索引需要占用磁盘空间,因此在创建索引时要考虑到磁盘空间是否足够.
 
@@ -85,7 +59,58 @@
         <3> 只有让数据查找更快时,使用索引.
 
 
-三. 主 键 索 引 操 作 :
+
+三. 普 通 索 引 : (Key列 列的值为 MUL)
+
+    表名 及 字段名
+
+    <1> 创 建 表 时 添 加 :
+        create table mytable(
+            id int not null primary key auto_increment,
+            username varchar(10) not null,
+            index[indexname] (username(length))
+        )
+
+
+    <2> create index index_name on my_table(field_name);
+
+        或 者 :
+
+        alter table my_table add index index_name(field_name)
+
+
+    <3> 删 除 索 引 :
+
+        (1) drop index my_index on tablename;
+
+        (2) alter table table_name drop index index_name;
+
+
+
+三.2 组 合 索 引 :
+
+    多列绑定为一个索引
+
+    <1> create index index_name on my_table(field_name1,2,3);
+
+        或 者 :
+
+        alter table my_table add index index_name(field_name1,2,3)
+
+
+    <2> 删 除 索 引 :
+
+        (1) drop index my_index on tablename;
+
+        (2) alter table table_name drop index index_name;
+
+    <3> 可指定字段 长度 作为索引 :
+
+        add index index_name(field_name(2));
+
+
+
+四. 主 键 索 引 操 作 : (Key列 的值为 PRI)
 
 
     <1> 添 加 主 键 索 引 : (用 修改字段格式 的方式)
@@ -104,7 +129,7 @@
 
 
         
-四. 唯 一 索 引 操 作 :
+五. 唯 一 索 引 操 作 : (Key列 的值为 UNI)
 
 
     <1> 添加 唯一 索引
@@ -126,3 +151,90 @@
             (删除不能用修改 字段格式的方式(modify/change))
 
 
+
+六. 索 引 的 原 理 :
+
+    <1> 哈 希 索 引 : 
+
+          MySQL只有memory(内存)存储引擎支持哈希索引,哈希索引用索引列的值计算该值
+
+        的hashCode,然后在hashCode相应的位置存该值所在行数据的物理位置,因为使用
+
+        散列算法,因此访问你速度非常快,大师一个值只能对应一个hashCode,而且是散列
+
+        的分布方式,因此哈希索引不支持范围查找和排序功能.
+
+
+    <2> B + Tree
+
+        只有叶子挂数据,并且所有数据都在叶子上,其他全是节点.
+
+        (1) B + Tree 是 B-Tree 的一个分支.
+
+                B-Tree都是节点,节点上挂数据.
+
+        (2) 叶子节点的高度都是相同的,顺序I/O次数多.
+
+        (3) 磁盘一次可以读取所有B+Tree的索引信息,再通过节点(索引)找到叶子.
+
+    <3> B + Tree 和 B - Tree 比的优势 :
+
+        计算机中,所有与空间相关的东西都是按照块(block)进行存取和操作的.
+
+        读取一次块都意味着一次I/O.
+
+        (1) 磁盘读写的代价更低.
+
+        (2) 随机I/O的次数更少.
+
+        (3) 查询速度更稳定.
+
+    <4> B + Tree 的遍历,从最左侧数据 到最右侧数据.
+
+
+
+七. 聚簇索引 与 非聚簇索引 :
+
+
+    <1> 判 断 依 据 : 索引和数据是不是聚集的(在不在一个文件里)
+
+        示 例 : InnoDB 聚簇index 和 MyISAM 非聚簇index
+
+        InnoDB .frm 表存表结构, .ibd 存储数据和索引.
+
+        MyISAM .frm 存储表结构, .MYD 存数据, .MYI 存索引
+
+    <2> 非聚簇索引 :
+
+        它的主索引和辅助索引的叶子上的 data 都是存储的 data 的物理地址.
+
+    <3> 聚簇索引 :
+
+        它的主索引就是 主键,主键上带着 data.辅助索引上 存的是 data的主键.
+
+            然后通过 主键数字,再找到 主键上的 data.
+
+
+八. 无 法 使 用 索 引 的 情 况 :
+
+    <1> like 模糊查询 通配符在 前时 
+
+        示 例 : like '_aa' like '%aa'
+
+    <2> 数据类型不匹配 :
+
+        示 例 : phone = 1378888888
+
+        正 确 为 : phone = '137888888'
+
+        本是 字符串类型,查找时 写了数字类型.
+
+    <3> 在查询条件上 使用了函数,此时无法使用索引.
+
+
+九. 覆 盖 索 引 和 回 行 :
+
+    就是组合索引
+
+    回 行 : 在当前的索引树上 列没有被覆盖就需要回行读取数据.
+    
