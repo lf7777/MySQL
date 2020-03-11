@@ -44,7 +44,7 @@
 
             cd /var/log/mysql/ 
 
-    <6> 重置 bin-log 日志
+    <6> 重置 bin-log日志
 
             reset master;
 
