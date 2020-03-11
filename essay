@@ -33,7 +33,7 @@
         source 路径;
 
 
-    <4> 删除行数据时 自增值跨过 被删除的自增值.
+    <4> 删除行数据时 自增值跨过 被删除的 自增值.
 
         在每次删除数据后,执行 alter table table_name auto_increment=1;
 
