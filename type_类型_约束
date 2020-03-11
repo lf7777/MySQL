@@ -88,6 +88,7 @@
     
     
     <4> 二 进 制 :
+
             多媒体资源是用二进制储存,但是没有人用 二进制去储存图片音频视频.
 
           如何存储 多媒体资源 :
@@ -122,6 +123,7 @@
     
     
     <4> primary(主要的) key 主键不能为空 且唯一.
+
     <5> auto_increment 定义列为自增属性,一般用于主键,数值会自动加1.
 
         示 例 : create table users(id int unsigned auto_increment primary key)
