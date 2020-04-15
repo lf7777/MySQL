@@ -313,15 +313,8 @@
         创建表时 <需指定 字段 和 类型>,
         varchar()是字符串类型,参数为 不超过参数个字符.  
 
-     ! ! ! 注 意 : ! ! ! 是在 <当前> 的库中创建,如表明相同则覆盖了.切记.
+        ! ! ! 注 意 : ! ! ! 是在 <当前> 的库中创建,如表明相同则覆盖了.切记.
 
-        create table table_name(
-        id int,
-        username varchar(30),
-        age int,
-        phone varchar(11)
-        );
-        
     <5> 删 除 表 :
         drop table table_name;
 
@@ -357,7 +350,6 @@
 
             alter table bb add sex char(1) not null default '男';
         
-        
         (2) 在某个字段 后添加:
             alter table 表名 add 字段信息 after 字段名;
         
@@ -386,7 +378,7 @@
             alter table 表名 change 新字段名 将要改字段 新字段名 
             指定新的类型 及 约束(或不约束);
 
-            alter table bb modify old_name new_name varchar(20) default '未命名'
+            alter table bb change old_name new_name varchar(20) default '未命名'
 
         
         (2) modify 
@@ -477,9 +469,13 @@
 
             delte from table_name where id in(1,2,3);
 
-
-        (2) 删除 大于 200的数据 :
+        (3) 删除 大于 200的数据 :
             delete from 表名 where id>200;
+
+        (4) truncate table table_name
+            delete * from table_name
+            
+            清空表中数据
         
 
     <3> 修 改 表 的 数 据 : 

@@ -14,6 +14,7 @@ cursor = db.cursor()
 try:
     #3. 准备sql语句
     sql = 'insert into bb values(null,28,"abc","男");'
+    #sql = 'insert into bb values(null,"{}","{}","{}");'
 
 
     #4. 执行sql语句 返回 操作数据 的条数

@@ -32,8 +32,41 @@
 
         source 路径;
 
+    <4> 数据库的导入与导出(终端)
 
-    <4> 删除行数据时 自增值跨过 被删除的 自增值.
+        导出：
 
-        在每次删除数据后,执行 alter table table_name auto_increment=1;
+        mysqldump -hlocalhost -p3306 -uroot -p123456 mydb 
+
+        --hex-blob> "/home/data.sql"
+
+        导 出 表 :
+
+            select content from table into outfile abspath (不带字段)
+
+        导出数据 : (带字段)
+
+        mysql -e 'select * from ... limit 5' /home...
+
+
+        导入：
+        
+        mysql -hlocalhost -p3306 -uroot -p123456 mydb < data.sql
+
+    <5> 设置导出文件路径:
+
+        vim /etc/mysql/my.cnf
+
+        [mysqld] 内添加 secure_file_priv=new_path
+
+        但是会有权限问题,暂时先使用默认的 /var/lib/mysql-files 取得文件.
+
+
+三. 其 他 语 句 :
+
+
+    <1> select user,host from mysql.user
+
+        查看 mysql用户的 命令.
+
 
