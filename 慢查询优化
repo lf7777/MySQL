@@ -15,7 +15,19 @@
         set long_query_time = 2;
 
 
-二. explain
+二. explain or desc
+
+    
+    desc select ..... from .... where ... \G;
+
+        作 用 : 分析语句的快慢及详情,\G 竖向显示(人性化展示)
+
+        语 法 : 查询语句前加desc 不会执行语句,而是分析语句.
+
+
+
+二.1 显 示 的 意 思 : 
+
 
 column          JSON名称      含义
 

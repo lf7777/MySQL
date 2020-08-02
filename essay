@@ -1,22 +1,4 @@
-一. 灵 活 运 用 :
-
-    <1> select id,name,(select ...) from ...
-
-        把子查询 直接 作为 新表的一个字段.
-
-
-    <2> desc select ..... from .... where ... \G;
-
-        作 用 : 分析语句的快慢,及详情.
-
-        语 法 : 查询语句前 加desc 不会执行语句,而是分析语句.
-
-
-    <3> explain
-
-
-
-二. 问 题 及 解 决 方 案 :
+一. 问 题 及 解 决 方 案 :
 
 
     <1> 删除行数据时 自增值跨过 被删除的自增值.
@@ -28,7 +10,7 @@
 
         show varibales like '%char%';
 
-    <3> 导入 建表语句 及 insert 的数据.
+    <3> 导入建表语句及 insert 的数据.
 
         source 路径;
 
@@ -42,7 +24,7 @@
 
         导 出 表 :
 
-            select content from table into outfile abspath (不带字段)
+        select content from table into outfile abspath (不带字段)
 
         导出数据 : (带字段)
 
@@ -68,5 +50,3 @@
     <1> select user,host from mysql.user
 
         查看 mysql用户的 命令.
-
-

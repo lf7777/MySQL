@@ -1,85 +1,66 @@
-目 标 : 简化SQL语句,提升查询精度速度.
+一. 操 作 符 :
 
 
-一. Union :
-
-    组 合 查 询 : 多条一起查,返回一个大的结果.
-
-    规 则 :
-
-            <1> 必须 2条以上 select语句 组成. 
-
-            <2> 语句间 用union关键字分隔
-
-                  示 例 : select * from t1 union select * from t2;
-
-            <3> 查询的每列 必须包含相同的 查询语句类型.(字段,聚集函数等)
-
-            <4> 列的数据类型 必须兼容.
-
-            <5> union all 
-            
-                union查询结果 <默认去重>. union all 获取所有结果 不去重.
-
-            <6> order by 
-            
-                只能用在最后一条语句中.
-
-
-
-二. where 子 句 操 作 符 :
-
-
-  where : 行 级 过 滤 
-
-
-    <1> != 不等于
+    <1> != 
     
+        不等于
+
+    <2> < <= > >=
+   
+        小于大于 
     
-    <2> is null 获取为空 的那一个值.(检索一个为空的值.)
+    <3> and 并且 (语句复杂时,注意 优先级问题,加括号)
     
+    <4> or 
     
-    <3> between 在 值 and 值 之间
+        或
     
+    <5> in
     
-    <4> and 并且 (语句复杂时,注意 优先级问题,加括号)
+        在什么里面 
+
+    <3> is null 
     
-    
-    <5> or 或
-    
-    
-    <6> in 
+        获取为空 的那一个值.(检索一个为空的值.)
+ 
 
 
-    <7> < <= > >=
+二. 子 句 :
+
+
+    <1> where 
+
+        where 过滤行数据,而不能过滤 group by 后的分组数据
+
+    <2> between ... and ...
     
-    
+        在 值 and 值 之间
 
-三. 子 句 :
-
-    <1> between 
-
-        select * from bb where age between 22 and 25;
+        select 字段 from 表 where 字段 between 100 and 200;
 
 
-    <2> in , not , not in 
+    <3> in , not , not in 
 
-      in :
+        in :
+
             in 操作符一般比 or 操作符 执行更快,由于mysql的原理.
 
             in 的最大优点 是可以包含其他 select 语句,
 
-      not : 
+       not : 
+
         select * from bb where not age > 30;
 
         not in 
+
         select * from bb where id not in (6,7);
 
-        用 作 : 在更复杂的子句中, not 是非常有用的.
+        作 用 : 在更复杂的子句中, not 是非常有用的.
+
                 例如在与 in操作符联合使用时,not使找出与条件列表不匹配的行很简单.
         
 
-    <3> ()
+    <4> ()
         
         区分一个子句 和其他 子句 :
 
@@ -88,16 +69,17 @@
         select * from bb where (age =30 and sex='男') or id in (10,13);
 
 
-
-    <4> like 
+    <5> like 
     
-        <通配符> 按照指定的字段 搜索 符合条件的数据 :
+        <通配符> 按照指定的字段 搜索符合条件的数据 :
 
-        语 法 : where 字段 like 条件('L%' '%L' '__' 'L__')
+        _ 表一位, % 表所有,此通配语句需要用 '' 包起 
+
+        select 字段 from 表 where 字段 like '20%'
 
         注 意 : 尽量不要把通配符放到搜索字符的前面
 
-                通配符 会使 索引 失效 !!!
+                通配符会使索引失效 !!!
 
         
         (1) '数据%' :  % 表示所有.
@@ -160,42 +142,78 @@
         select 表.字段 from 库.表
 
 
-    <9> concat
-    
-        字 段 拼 接 : (把多个字段的内容放到一个字段显示)
+    <9> distinct 
 
-        concat 函数里 可以随意指定字符串,最终一起拼接.
+        去 重 :
 
-        1. 普通 直接相连的拼接 :
-        select concat(id,username) from bb;
+        次关键字,指示MySQL只返回不同的值.
 
-        2. 指定别名的拼接 :
-        select concat(id,username) as id_and_username from bb;
-        
-        3. 拼接其他内容 :
-        select concat(id,':',username) as id_and_username from bb;
+        语 法 : select 后面 加 distinct
 
-
-    <10> distinct 
-         去 重 :
-
-         次关键字,指示MySQL只返回不同的值.
-
-         语 法 : select 后面 加 distinct
-
-         示 例 : select distinct age from bb;
+        示 例 : select distinct age from bb;
     
 
-    <11> limit 
+    <10> limit 
     
-         限制结果数量(和跳行) 写在最后
+        限制结果数量(和跳行),写在最后
 
-         select a from bb limit 4,4;
+        limit 1,1 跳过一条读一条
+
+        select a from bb limit 4,4;
 
 
-    <12> order by  升序. 
+    <11> order by  升序 
     
-         order by ... desc 降序.
+         order by ... desc 降序
+
+
+    <12> union :
+
+         组 合 查 询 : 多条一起查,返回一个大的结果.
+
+         规 则 :
+
+            <1> 必须 2条以上 select语句 组成. 
+
+            <2> 语句间 用union关键字分隔
+
+                示 例 : select * from t1 union select * from t2;
+
+            <3> 查询的每列 必须包含相同的 查询语句类型.(字段,聚集函数等)
+
+            <4> 列的数据类型 必须兼容.
+
+            <5> union all 
+            
+                union all 获取所有不去重结果.union查询的结果默认是去重的.
+
+            <6> order by 
+            
+                只能用在最后一条语句中.
+
+
+    <13> is null
+
+         查询语句中是空值的,配合where
+
+         select id from 表 where price is null;
+
+         isnull(avg(sc.Score)
+
+         select ... left join ... having... or isnull(avg(sc.Score))
+
+         查询左边有成绩的和剩余没有成绩的,通常having过滤掉null值,但可是用
+         or isnull(avg...) 再次显示null值
+
+         示例:
+         select s.Sid,s.Sname,avg(sc1.Score) from student s 
+         left join score sc1 on s.Sid=sc1.Sid group by s.Sid having 
+         avg(sc1.Score)<60 or isnull(avg(sc1.Score))
+
+
+    <14> ifnull()
+
+        判断第一个表达式是否为null,不为null则返回第一个参数的值,如果为null则返回第二个参数的值.
 
 
   分 组 : group by 
@@ -225,21 +243,18 @@
         将 count 的默认值,改为3, 所以 当次数 达到 3 时,才会显示 1次.
 
 
+        having : 在原有 分组 得到次数后,再进行 细化:having count(*)/别名=某次数;
 
-  Having : 在原有 分组 得到次数后,再进行 细化:having count(*)/别名=某次数;
-
-         having = 某次数 也可以是 >= 或者其他 : having count(*)/别名>=某次数
-
-
-    注 意 : 只能用在 group by 后面,对已经分组的结果,再进行过滤.
-
-        select age,count(id) as num from bb group by age having num =1;
+        having = 某次数 也可以是 >= 或者其他 : having count(*)/别名>=某次数
 
 
+        注 意 : 只能用在 group by 后面,对已经分组的结果,再进行过滤.
 
-四. J O I N :
+            select age,count(id) as num from bb group by age having num =1;
 
-  <详见 my_mysql库总的 t1表 和 t2表>
+
+四. join 子 句 :
+
 
     <1> cross join    cross : 交叉    笛卡尔积
 
@@ -253,7 +268,6 @@
         内连接就是求两个表的交集,从交叉配对上选出满足 on子句 条件的数据.
 
         语 法 : select t1.id,t2.id from t1 inner join t2 on t1.person.t2.person
-
 
 
     <3> left join 
@@ -298,4 +312,4 @@
 
 六. Select 指 令 的 执 行 顺 序 :
 
-    From    Select    Where    
+    From Select Where group by having order by limit;  

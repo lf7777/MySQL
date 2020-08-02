@@ -36,6 +36,7 @@
 
 
         4. DCL 数据 控制
+
            用来授权或回收访问数据库的某种特权,并控制数据库操纵事物发生的时间
                及效果,对数据库进行监视等.
 
@@ -59,7 +60,7 @@
         4. 支持远程数据共享和权限管理.
 
 
-    关 系 型 数 据 库 : (MySQL.Oracle.Microsoft SQL Server.PgSQL)
+    关 系 型 数 据 库 : (MySQL.Oracle.Microsoft SQL Server PgSQL)
 
         特 点 :
 
@@ -76,7 +77,7 @@
             5.若干的表格组成关系型数据库(database),每个数据库有自己的名字(唯一)
 
 
-    非 关 系 型 数 据 库 : (Redis.Mongodb)
+    非 关 系 型 数 据 库 : (Redis Mongodb)
 
 
 
@@ -89,15 +90,19 @@
 
         2. 表    表像excel中的一个表格,里面有很多的 字段数据(行,列).
 
-        3. 行    一行数据.
+            主 键 primary key : 
 
-        4. 列    一列数据.
+                用来标识行数据的唯一性
+
+        3. 行 row   一行数据.
+
+        4. 列 columns   一列数据.
 
         5. 字段  列的头.一列数据的一个表示.
 
         6. 主 键 : 每个行信息 在数据库中的 <唯一的标识>,类似身份证.
                
-               作 用 : 快速的找到 这一行的数据.
+                   作 用 : 快速的找到 这一行的数据.
 
 
     常见英文: 1. information_schema 信息架构
@@ -157,16 +162,20 @@
        
            表结构为 .frm 存储表结构, .ibd 存储数据和索引.
 
-           聚簇索引
+           聚簇索引 : 索引与数据是在一个文件上,B树叶子上同时存数据与索引,
+           
+                      数据按照索引的顺序存储
+
+      
 
 
      2.  MyISAM 主要的非事物处理存储引擎
 
            表结构为 .frm 存储表结构, .MYD 存数据, .MYI 存索引
 
-           因myisam的索引文件设数据文件分开,所以B+Tree的叶子存的是地址而非数据.
+           因myisam的索引文件与数据文件分开,所以B+Tree的叶子存的是地址而非数据.
 
-           非聚簇索引
+           非聚簇索引 : 索引与数据不在一个文件上
 
 
      3.  ARCHIVE 用于数据存档(行被插入后不能再修改)
@@ -227,6 +236,7 @@
 
 三. 基 本 操 作 :
 
+
     <1> 开启关闭 MySQL 服务 相关:
 
         (1) linux :
@@ -259,6 +269,16 @@
 
         (3) 修改 表的存储引擎 : 
             alter table 表名 engine='存储引擎名称'
+
+
+    <3> show status;
+
+        用于显示广泛的服务器状态信息
+
+
+    <4> show errors or show warnings
+
+        用来显示服务器错误或警告信息
 
 
 
@@ -315,11 +335,13 @@
 
         ! ! ! 注 意 : ! ! ! 是在 <当前> 的库中创建,如表明相同则覆盖了.切记.
 
+
     <5> 删 除 表 :
         drop table table_name;
 
 
     <6> 查 看 表 中 的 数 据 :
+
         select * from table;
 
         select * from table where username='张三'
@@ -363,6 +385,11 @@
       删 除 字 段 : 
         
         (1) alter table 表名 drop 要被删的字段名;
+
+
+    修 改 表 名 字 :
+
+        alter table 旧名 rename to 新名:
         
 
      修 改 字 段 类 型 :
@@ -375,7 +402,7 @@
 
         
         (1) change
-            alter table 表名 change 新字段名 将要改字段 新字段名 
+            alter table 表名 change 旧字段名 新字段名 新字段类型 
             指定新的类型 及 约束(或不约束);
 
             alter table bb change old_name new_name varchar(20) default '未命名'
@@ -396,7 +423,7 @@
 
         1. 如果表中数据 不允许为空 , 且没设置默认值,在添加时必须给数据.
 
-        2. 修改值时,必须加where 找到某个某些歌,不加则所有都改了.
+        2. 修改值时,必须加where 找到某个某些个,不加则所有都改了.
 
         3. 如果不给表设置字符集,默认同库的字符集相同.
 
@@ -453,6 +480,8 @@
 
     <2> 给 表 删  除 数 据 :
 
+        delete from table where ...
+
         (1) 删除 单条 数据 :
             delete from table_name where field_name=数据;
 
@@ -479,6 +508,8 @@
         
 
     <3> 修 改 表 的 数 据 : 
+
+        update table set ... = ... where ...
 
         1. 修改单个字段的单个值 :
 

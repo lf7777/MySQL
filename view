@@ -13,30 +13,32 @@
 
         create view view_name as select ......
 
-
-    <2> 查看当前库中 所有的视图
-
-        show tables;  查看所有表和视图
-
-        show table status where comment='view';  查看当前库中所有视图.
-
-
-    <3> 删除 :
+    <2> 删除视图 :
         drop view view_name;
 
-        修改 :
-        alter view
 
-        创建 create view
+    <3> 修改视图 :
+ 
+        alter view view_name
 
+
+    <2> 查看当前库中 所有 表和视图
+
+        show tables;  
+
+        查看当前库中 所有 视图
+        
+        show table status where comment='view';  
 
 
 
 三. 注 意 ! ! ! : 
 
-    <1> view 视图里保存的数据 和 原数据 是相关联的.
 
-            修改原数据 等与修改 视图.
-            修改视图   等于修改 原数据.
+    <1> 新view 的数据 和 原数据 保持关联
 
-    <2> MySQL 5.0后版本支持.
+        修改原数据 = 修改视图
+        修改视图   = 修改原数据
+
+
+    <2> 视图在MySQL 5.0后版本支持.

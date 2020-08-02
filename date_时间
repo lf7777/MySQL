@@ -1,0 +1,102 @@
+日 期 基 本 概 念 : 
+
+
+    Mysql日期是字符串格式
+
+    日 期 格 式 :
+
+        <1> date 日期 年月日
+
+        <2> time 时间 时分秒
+
+        <3> datatime 日期 时间
+
+            datatime 8字节 1000-01-01 00:00:00 ~ 9999-12-31 23:59:59
+
+一. 日 期 转 换 函 数 : 
+
+
+    <1> date()
+
+        将datetime格式的转换为date格式
+
+        12位格式改为6位纯日期格式
+
+        示 例 : 提取某天的数据 
+        
+            select id from t where date(date1)='2020-02-03'
+
+
+    <2> between ... and ...;
+
+        示 例 : 查询某月的数据
+
+        select id from t where date1 between '2020-01-01' and '2020-                                              05-05';
+
+
+    <3> year() month()
+
+        提取数据中的年份 
+
+        示 例 : 提取某月的数据
+
+        select id from t where year(date1)=2020 and month(date1)=5;
+
+
+    <4>
+
+
+    <5>
+
+
+    <6>
+
+
+    <7>
+
+
+    <8>
+
+
+    <9>
+
+
+    <10>
+
+
+
+二. 当 前 时 间 相 关 :
+
+
+    <1> now()
+
+        获取当前时间
+
+        示 例 :
+
+            select now();
+
+    <2> year(now())
+
+        当年
+
+    <3> month(now());
+
+        当月
+
+    <4> week(now())
+
+        当年的第几周
+
+    <5> time(now())
+
+        当前小时:分钟:秒
+
+    <6> hour(now())
+
+        当前小时
+
+    <>
+    <>
+    <>
+

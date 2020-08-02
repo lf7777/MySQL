@@ -1,0 +1,25 @@
+<1> 累 加 运 算 : 
+
+
+    示 例 : 
+    
+        select a.日期,a.amount,sum(b.amount) total from aaa a join aaa b on a.日期>=b.日期 group by a.日期; 
+
+        详见 my_mysql aaa表
+
+
+    问 题 : 参见linux系统谷歌收藏
+
+        在mysql中使用 group by 出现的问题 
+
+    ERROR 1055 (42000): Expression #3 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'ynn.goods.goods_id' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+
+    问题原因： 
+
+    ONLY_FULL_GROUP_BY的意思是：对于GROUP BY聚合操作，如果在SELECT中的列，没有在GROUP BY中出现，那么这个SQL是不合法的，因为列不在GROUP BY从句中，也就是说查出来的列必须在group by后面出现，否则就会报错，或者这个字段出现在聚合函数里面。 
+
+    在select指定的字段要么就要包含在Group By语句的后面，作为分组的依据；要么就要被包含在聚合函数中。
+    
+    解 决 方 案 : 
+
+        set sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';

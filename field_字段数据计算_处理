@@ -1,0 +1,226 @@
+一. 数 值 计 算 :
+
+
+    <1> abs()
+
+        绝对值
+
+        select abs(字段) from 表;
+
+    <2> cos()
+
+        返回一个角度的余弦
+
+    <3> exp()
+
+        返回一个数的指数值
+
+    <4> mod()
+
+        返回除操作的余数
+
+    <5> pi()
+
+        返回圆周率
+
+    <6> rand()
+
+        返回一个随机数
+
+    <7> sin()
+    
+        返回一个角度的正弦
+
+    <8> sqrt()
+
+        返回一个数的平方根
+
+    <9> tan()
+
+        返回一个角度的正切
+
+
+    <10>对字段进行普通运算(+-*/) : 
+    
+        select abs(字段)*100 from 表;
+
+        select *,(number*单价) as 总价 from 表; 
+
+
+
+二. 数 据 函 数 :
+
+
+    <1> concat() 字 段 拼 接 : (把多个字段的内容放到一个字段显示)
+
+        concat 函数里 可以随意指定字符串,最终一起拼接.
+
+        1. 普通 直接相连的拼接 :
+            select concat(id,username) from bb;
+
+        2. 指定别名的拼接 :
+            select concat(id,username) as id_and_username from bb;
+
+        3. 拼接其他内容 :
+            select concat(id,':',username) as id_and_username from bb;
+
+    
+    <2> left()
+
+        示 例 : left(字段,4) 查该字段的前3个字符
+    
+        参 数 1 : 要查的字段
+
+        参 数 2 : 查字段中内容的 <前> 几个
+
+
+    <3> right()
+
+        示 例 : right(字段,4) 查该字段从右边数4个字符
+    
+        参 数 1 : 要查的字段
+
+        参 数 2 : 查字段中内容的 <后> 几个
+
+
+    <4> upper()
+      
+        转换为大写
+
+        示 例 :
+
+            select upper(字段) from 表;
+
+
+    <5> lower()
+      
+        转换为小写
+
+        示 例 :
+
+            select lower(字段) from 表;
+
+
+    <6> length()
+      
+        返回字符串的长度
+
+        示 例 :
+
+            select length(字段) from 表;
+
+            返回在该字段中每行的信息的长度
+
+
+    <7> ltrim() 
+    
+        注 意 : 只能作用在 字段或自定义字符.  
+
+        左对齐 显示数据
+
+        示 例 : select ltrim(字段) from 表;
+
+
+    <8> rtrim()
+
+        右对齐 显示数据
+
+        示 例 : select rtrim(字段) from 表;
+
+
+    <9> locate()
+
+        判断该字符串是否在另一个字符串中.
+
+        locate(子串,目标字符串)
+
+        存在返回 1 , 不存在返回 0
+
+        select locate(100,字段等) from 表;
+
+        select amount from aaa where locate(100,amount)>0;
+
+            locate(100,amout)如果该行的该列信息包含100,就会显示1,之后做判断>0,
+
+            则只会显示1(locate的结果为True)的结果.
+
+
+    <10>substring()
+
+        从左开始截取字符串
+
+        substring(要被截取的字段或字符串,从第几位开始,截取几位))
+
+        参数2:第一位是1 参数3:默认不写截取所有
+
+
+    <11>md5()
+
+        加密
+
+        示 例 : select md5(要加密的内容);
+
+
+三. 聚 集 函 数 与 分 组 :
+
+
+    <1> count()
+
+        返回某列的行数,如果为 null 则不统计.
+
+        (1) 按照字段统计 :
+            select count(id);
+       
+        (2) where : 字段为 指定值的 行数量是多少 
+            select count(sex) from bb where sex='男';
+
+        注 意 : 用 count(*) 不会忽略某列中有 null 的行数.
+
+                而 count(某列) 有null时则会忽略.
+
+
+    <2> sum() 求 和 : 
+
+        select sum(age) from bb;
+
+
+    <3> max() 求 最 大 值 :
+
+        select max(age) from bb;
+
+
+    <4> min() 求 最 小 值 :
+
+        select min(age) from bb;
+
+
+    <5> avg() 求 某 列 平 均 值 :
+        
+        select avg(age) from bb;
+
+
+    分 组 : group by
+
+        用到聚合函数 就要用到分组,分组再聚合.不然是全部的(sum(),count()等)
+
+        将一个字段中,拥有相同名称的.
+
+        查哪个字段 就要对哪个字段进行 group by
+
+    <1> group by
+
+        字段名 :
+
+        select sex,count(id) from bb group by sex;
+
+
+    <2> 多 重 分 组 :
+
+        在当前的检索的列中,除了聚集函数不用列到分组上,其他列都需要在分组后面列出
+
+        select class,cname,count(*) from bb group by class,cname;
+
+
+    <3> count(id) = 3 :
+
+        将 count 的默认值,改为3, 所以 当次数 达到 3 时,才会显示 1次.

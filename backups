@@ -24,29 +24,29 @@
 
     <1> 开启bin-log日志
 
-            sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
+        sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
 
     <2> 找到 以下两个配置项,打开注释
 
-            server-id = 1
+        server-id = 1
 
-            log_bin = /var/log/mysql/mysql-bin.000001
+        log_bin = /var/log/mysql/mysql-bin.000001
 
     <3> 重启 mysql
 
-            sudo service mysql restart
+        sudo service mysql restart
 
     <4> 查看当前所有 bin-log 日志
 
-            show binary logs;
+        show binary logs;
 
     <5> 查看是否存在 bin-log 文件
 
-            cd /var/log/mysql/ 
+        cd /var/log/mysql/ 
 
     <6> 重置 bin-log日志
 
-            reset master;
+        reset master;
 
 
   Windows :
